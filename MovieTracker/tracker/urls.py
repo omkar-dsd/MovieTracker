@@ -6,4 +6,5 @@ urlpatterns = [
     url(r'^login/$', views.Login),
     url(r'^logout/$', views.Logout),
     url(r'^home/$', views.Home),
+    url(r'^signup/$', views.Signup),
 ]
