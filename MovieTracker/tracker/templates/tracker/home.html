@@ -2,9 +2,18 @@
 
 <p>This is home.</p>
 
-<a href="/blog/">Blog</a>
+<!--<a href="/blog/">Blog</a>-->
 {% if user.is_authenticated %}
     <a href="/logout/">Logout</a>
+    {{ fav_color }}
+    <form action="/home/" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit" />
+    </form>
+
+
+
 {% else %}
     <a href="/login/?next={{ request.path }}">Login</a>
 {% endif %}
