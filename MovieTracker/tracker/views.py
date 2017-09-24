@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserCreationForm
 from MovieTracker import settings
 from django.contrib.auth.decorators import login_required
 from django import forms
+import requests
+import json
 
 
 
@@ -27,7 +29,7 @@ class ColorForm(forms.Form):
 
 
 def Login(request):
-    next = request.GET.get('next', '/home/')
+    next = request.GET.get('next', '/watched/')
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
@@ -49,9 +51,9 @@ def Logout(request):
     return HttpResponseRedirect(settings.LOGIN_URL)
 
 
-# login is required for the following function Home
+# login is required for the following function Watched
 @login_required
-def Home(request):
+def Watched(request):
     if request.method == 'POST':
 
         form = ColorForm(request.POST)
@@ -62,7 +64,7 @@ def Home(request):
             # redirect to a new URL:
             request.session["fav_color"] = request.POST['fav_color']
 
-            # return HttpResponseRedirect('/home/')
+            # return HttpResponseRedirect('/watched/')
     else:
         form = ColorForm()
 
@@ -70,8 +72,56 @@ def Home(request):
         # print "relksal;dfkm"
         request.session["fav_color"] = "Empty"
 
-    return render(request, "tracker/home.html", {'fav_color':request.user,
+    return render(request, "tracker/watched.html", {'current_user':request.user,
                                                  'form':form})
+
+
+@login_required
+def Unwatched(request,pageNumber=1):
+    if request.method == 'POST':
+
+        form = ColorForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            request.session["fav_color"] = request.POST['fav_color']
+
+            # return HttpResponseRedirect('/watched/')
+    else:
+        form = ColorForm()
+
+    if(not "fav_color" in request.session.keys()):
+        # print "relksal;dfkm"
+        request.session["fav_color"] = "Empty"
+
+    movies_list = getTopRated(pageNumber)
+    return render(request, "tracker/unwatched.html", {'current_user':request.user,
+                                                      'movies_list' : movies_list})
+
+@login_required
+def Movie(request):
+    if request.method == 'POST':
+
+        form = ColorForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            request.session["fav_color"] = request.POST['fav_color']
+
+            # return HttpResponseRedirect('/watched/')
+    else:
+        form = ColorForm()
+
+    if(not "fav_color" in request.session.keys()):
+        # print "relksal;dfkm"
+        request.session["fav_color"] = "Empty"
+
+    return render(request, "tracker/unwatched.html", {'current_user':request.user})
+
 
 def Blog(request):
     return render(request, "tracker/blog.html", {})
@@ -87,8 +137,21 @@ def Signup(request):
             user = authenticate(username=username, password=raw_password)
             login(request, user)
             # return redirect('tracker/home')
-            return render(request, "tracker/home.html", {})
+            return render(request, "tracker/watched.html", {})
     else:
 
         form = UserCreationForm()
     return render(request, 'tracker/signup.html', {'form': form})
+
+
+def getTopRated(pageNumber):
+    r = requests.get("https://api.themoviedb.org/3/movie/top_rated?api_key=ca59847d10d1b5321571a0a279c95e61&language=en-US&page="+str(pageNumber))
+    movies = json.loads(r.text)
+
+    if pageNumber>movies['total_pages']:
+        return None
+    else:
+        for i in range(len(movies['results'])):
+            movies['results'][i]['poster_path'] = "https://image.tmdb.org/t/p/w150" + movies['results'][i]['poster_path']
+
+        return movies['results']

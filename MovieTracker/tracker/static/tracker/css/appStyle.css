@@ -1,0 +1,189 @@
+body{
+    margin:0;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    top: -0.5;
+
+}
+
+li {
+    float: left;
+    border-right:1px solid #bbb;
+}
+
+li:last-child {
+    border-right: none;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: #111;
+}
+
+.active {
+    background-color: #4CAF50;
+}
+
+
+/* For cards */
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    border-radius: 5px; /* 5px rounded corners */
+}
+
+/* Add rounded corners to the top left and the top right corner of the image */
+img {
+
+border-radius: 5px 5px 0 0;
+    margin-left: auto;
+	margin-right: auto;
+	display: block;
+
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Add some padding inside the card container */
+.container {
+    padding: 2px 16px;
+}
+
+
+
+/*tiled */
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+}
+
+.tile-grid {
+  margin-right: -4px;
+  overflow: hidden;
+}
+
+.tile:hover{
+    box-shadow: 0 8px 16px 0 rgba(255,0,0,0.2);
+}
+
+.tile {
+  background-color: #f1f1f1;
+  -webkit-background-clip: padding;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 0 4px 4px 0;
+}
+
+.tile-column-3 {
+  width: 25%;
+}
+
+.tile-column-4 {
+  width: 33.33%;
+}
+
+.tile-column-6 {
+  width: 50%;
+}
+
+.tile-column-8 {
+  width: 66.66%;
+}
+
+.tile-column-12 {
+  width: 100%;
+}
+
+.tile-grid-item {
+  float: left;
+  position: relative;
+  padding-bottom: 25%;
+}
+
+.tile-inner-padded {
+  padding: 10px;
+}
+
+.tile-grid-item-inner,
+.tile-square-inner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+/* Square */
+.tile-square {
+  border-right-width: 0; /* If tile-square is inside tile-grid, the border should be added back */
+  padding-bottom: 100%;
+  position: relative;
+}
+
+/* Auto Height */
+.tile-auto {
+  padding-bottom: 0;
+}
+
+/* Nested Tiles */
+.tile-table {
+  background-color: transparent;
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+
+.tile-table-row {
+  display: table-row;
+}
+
+.tile-table-cell {
+  display: table-cell;
+  vertical-align: top;
+}
+
+/* Center */
+.u-text-center {
+  text-align: center;
+}
+
+.u-align-middle {
+  vertical-align: middle;
+}
+
+
+/* boxes */
+
+.foo {
+  float: left;
+  width: 20px;
+  height: 20px;
+  margin: 5px;
+  border: 1px solid rgba(0, 0, 0, .2);
+}
+
+.blue {
+  background: #13b4ff;
+}
