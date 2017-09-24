@@ -1,24 +1,49 @@
 <html>
 
-    <head>
-        {% load static %}
-        <link rel="stylesheet" type="text/css" href="{% static "tracker/css/appStyle.css" %}">
-        <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
-    </head>
+<head>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static " tracker/css/appStyle.css " %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
 
-    <body>
-        {% if user.is_authenticated %}
-            <ul>
-              <li><a href="#watched">{{ current_user }}</a></li>
-              <li><a class="active" href="#watched">Watched</a></li>
-              <li><a href="/unwatched/">Un-watched</a></li>
+<body>
+  {% if user.is_authenticated %}
+  <ul>
+    <li><a href="#user">
+                <i class="fa fa-user-o" aria-hidden="true"></i> {{ current_user }}</a>
+    </li>
+    <li><a class="active" href="/watched/">
+                <i class="fa fa-map-signs" aria-hidden="true"></i> Watched</a>
+    </li>
+    <li><a href="/unwatched/">
+                <i class="fa fa-th" aria-hidden="true"></i> Un-watched</a>
+    </li>
 
-              <li style="float:right"><a href="/logout/">Log Out</a></li>
-            </ul>
-        {% else %}
-            <a href="/login/?next={{ request.path }}">Login</a>
-        {% endif %}
+    <li style="float:right"><a href="/logout/">
+                <i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</a>
+    </li>
+  </ul>
 
-    </body>
+  {% for movie in movies_list %}
+
+  <div class="tile tile-grid-item tile-column-3">
+    <div class="tile-inner-padded tile-grid-item-inner">
+
+      <img src={ { movie.poster_path }} alt="Avatar">
+      <div class="container">
+        <h4><b>{{ movie.title }}</b></h4>
+        <p><i class="fa fa-star" aria-hidden="true"></i> {{movie.vote_average}}
+          <!-- <a href="{% url 'watchedMovie' movieid=movie.id %}" class="button">Save to watched</a></p> -->
+      </div>
+
+    </div>
+  </div>
+
+
+
+  {% endfor %} {% else %}
+  <a href="/login/?next={{ request.path }}">Login</a> {% endif %}
+
+</body>
 
 </html>
