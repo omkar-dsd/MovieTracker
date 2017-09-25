@@ -30,6 +30,8 @@ from django.core.urlresolvers import reverse
 class ColorForm(forms.Form):
     fav_color = forms.CharField(label='Fav Color', max_length=100)
 
+def gotoLogin(request):
+    return HttpResponseRedirect(reverse('login'))
 
 def Login(request):
     next = request.GET.get('next', '/unwatched/')

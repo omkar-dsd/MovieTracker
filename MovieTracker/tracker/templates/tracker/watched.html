@@ -2,7 +2,7 @@
 
 <head>
   {% load static %}
-  <link rel="stylesheet" type="text/css" href="{% static " tracker/css/appStyle.css " %}">
+  <link rel="stylesheet" type="text/css" href="{% static "tracker/css/appStyle.css" %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
@@ -24,24 +24,35 @@
     </li>
   </ul>
 
-  {% for movie in movies_list %}
+  {% if movies_list%}
 
-  <div class="tile tile-grid-item tile-column-3">
-    <div class="tile-inner-padded tile-grid-item-inner">
+      {% for movie in movies_list %}
 
-      <img src={ { movie.poster_path }} alt="Avatar">
-      <div class="container">
-        <h4><b>{{ movie.title }}</b></h4>
-        <p><i class="fa fa-star" aria-hidden="true"></i> {{movie.vote_average}}
-          <!-- <a href="{% url 'watchedMovie' movieid=movie.id %}" class="button">Save to watched</a></p> -->
+      <div class="tile tile-grid-item tile-column-3">
+        <div class="tile-inner-padded tile-grid-item-inner">
+
+          <img src={{ movie.poster_path }} alt="Avatar">
+          <div class="container">
+            <h4><b>{{ movie.title }}</b></h4>
+            <p><i class="fa fa-star" aria-hidden="true"></i> {{movie.vote_average}}
+              <!-- <a href="{% url 'watchedMovie' movieid=movie.id %}" class="button">Save to watched</a></p> -->
+          </div>
+
+        </div>
       </div>
 
+      {% endfor %}
+
+  {% else %}
+
+      <div style="position:fixed;background-color:#D0D3D4;min-height:100%;min-width:100%;display: table-cell;text-align: center;vertical-align: middle;">
+        <h2 align="center">
+          Your watch list is empty
+        </h2>
     </div>
-  </div>
+  {% endif %}
 
-
-
-  {% endfor %} {% else %}
+  {% else %}
   <a href="/login/?next={{ request.path }}">Login</a> {% endif %}
 
 </body>

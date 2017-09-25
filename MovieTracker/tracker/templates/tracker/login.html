@@ -1,59 +1,36 @@
-<!DOCTYPE html>
-
-
-
 <html>
 
 <head>
   {% load static %}
-  <link rel="stylesheet" type="text/css" href="{% static " tracker/css/loginPage.css " %}">
+  <link rel="stylesheet" type="text/css" href="{% static "tracker/css/loginPage.css" %}">
+  <script src="{% static "tracker/js/loginPage.js" %}"></script>
 </head>
 
 <body>
 
-  <h2>Movie Tracker</h2>
 
-  <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
-  <a href="/signup/">Sign Up</a>
-  <div id="id01" class="modal">
 
-    <form method="post" class="modal-content animate" action=".?next={{ redirect_to }}"> {% csrf_token %}
-      <div class="imgcontainer">
-        <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+  <div class="login-page">
+    <h1 align="center">Movie Tracker</h1>
+    <div class="form">
+      <form class="register-form">
+        <input type="text" placeholder="name" />
+        <input type="password" placeholder="password" />
+        <input type="text" placeholder="email address" />
+        <button>create</button>
+        <p class="message">Already registered? <a href="#">Sign In</a></p>
+      </form>
+      <form method="post" class="login-form" action=".?next={{ redirect_to }}"> {% csrf_token %}
+        <input type="text" name="username" placeholder="username" />
+        <input type="password" name="password" placeholder="password" />
+        <button type="submit">login</button>
 
-        <h1>Movie Tracker</h1>
-      </div>
-
-      <div class="container">
-        <label><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="username" required>
-
-        <label><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="password" required>
-
-        <button type="submit">Login</button>
-        <!-- <input type="submit" value="Login"/> -->
-      </div>
-
-      <div class="container" style="background-color:#f1f1f1">
-        <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-
-      </div>
-    </form>
+      </form>
+      <p class="message">Not registered? <a href="/signup/">Create an account</a></p>
+    </div>
   </div>
 
-  <script>
-    // Get the modal
-    var modal = document.getElementById('id01');
 
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
-  </script>
 
 </body>
-
 </html>

@@ -2,7 +2,7 @@
 
 <head>
   {% load static %}
-  <link rel="stylesheet" type="text/css" href="{% static " tracker/css/appStyle.css " %}">
+  <link rel="stylesheet" type="text/css" href="{% static "tracker/css/appStyle.css" %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
@@ -29,7 +29,7 @@
   <div class="tile tile-grid-item tile-column-3">
     <div class="tile-inner-padded tile-grid-item-inner">
 
-      <img src={ { movie.poster_path }} alt="Avatar">
+      <img src={{ movie.poster_path }} alt="Avatar">
       <div class="container">
         <h4><b>{{ movie.title }}</b></h4>
         <p><i class="fa fa-star" aria-hidden="true"></i> {{movie.vote_average}}
