@@ -3,8 +3,9 @@
 <head>
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static "tracker/css/loginPage.css" %}">
-  <link rel="shortcut icon" type="image/png" href="{{STATIC_URL}}/tracker/images/favicon.ico"/>
+  <link rel="shortcut icon" type="image/png" href="{% static "tracker/images/favicon.ico" %}"/>
   <script src="{% static "tracker/js/loginPage.js" %}"></script>
+  <title>MT - Login</title>
 </head>
 
 <body>
@@ -14,13 +15,7 @@
   <div class="login-page">
     <h1 align="center">Movie Tracker</h1>
     <div class="form">
-      <form class="register-form">
-        <input type="text" placeholder="name" />
-        <input type="password" placeholder="password" />
-        <input type="text" placeholder="email address" />
-        <button>create</button>
-        <p class="message">Already registered? <a href="#">Sign In</a></p>
-      </form>
+
       <form method="post" class="login-form" action=".?next={{ redirect_to }}"> {% csrf_token %}
         <input type="text" name="username" placeholder="username" />
         <input type="password" name="password" placeholder="password" />
