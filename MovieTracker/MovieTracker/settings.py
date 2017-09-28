@@ -10,6 +10,9 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import ConfigParser
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
@@ -19,7 +22,10 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '=x71b2c6v7wh!ku99%$a4%kind_cd35*ctlw$o*85w44z_%22z'
+config = ConfigParser.ConfigParser()
+config.read('config.ini')
+
+SECRET_KEY = config.get('keys','security_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
