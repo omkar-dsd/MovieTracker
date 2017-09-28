@@ -12,21 +12,8 @@ from django.core.urlresolvers import reverse
 
 
 
+API_KEY = os.environ.get('TMDB_API_KEY')
 
-# Keys:
-#
-# API Key (v3 auth)
-# ca59847d10d1b5321571a0a279c95e61
-# API Read Access Token (v4 auth)
-# eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjYTU5ODQ3ZDEwZDFiNTMyMTU3MWEwYTI3OWM5NWU2MSIsInN1YiI6IjU5YzYzN2E2OTI1MTQxNWI2ZTAzZDc4NSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.5pcWArPylqn1BxS5Lgsdn90li5_YfXD34OPhYG76-uY
-# example request
-# https://api.themoviedb.org/3/movie/550?api_key=ca59847d10d1b5321571a0a279c95e61
-
-# Example Image url
-# https://image.tmdb.org/t/p/w150/nl79FQ8xWZkhL3rDr1v2RFFR6J0.jpg
-
-#Get movie detail
-# https://api.themoviedb.org/3/movie/278?api_key=ca59847d10d1b5321571a0a279c95e61&language=en-US
 class ColorForm(forms.Form):
     fav_color = forms.CharField(label='Fav Color', max_length=100)
 
@@ -59,23 +46,6 @@ def Logout(request):
 # login is required for the following function Watched
 @login_required
 def Watched(request):
-    # if request.method == 'POST':
-    #
-    #     form = ColorForm(request.POST)
-    #     # check whether it's valid:
-    #     if form.is_valid():
-    #         # process the data in form.cleaned_data as required
-    #         # ...
-    #         # redirect to a new URL:
-    #         request.session["fav_color"] = request.POST['fav_color']
-    #
-    #         # return HttpResponseRedirect('/watched/')
-    # else:
-    #     form = ColorForm()
-    #
-    # if(not "fav_color" in request.session.keys()):
-    #     # print "relksal;dfkm"
-    #     request.session["fav_color"] = "Empty"
 
     watchedMovieIds = UserWatched.objects.values_list('movie_id', flat=True).filter(username=request.user)
     if(not watchedMovieIds):
@@ -163,35 +133,35 @@ def getTopRated(request,pageNumber):
 
     watchedMovieIds = UserWatched.objects.values_list('movie_id', flat=True).filter(username=request.user)
 
-    god = []
+    topRatedList = []
 
-    while(len(god)<100):
-        r = requests.get("https://api.themoviedb.org/3/movie/top_rated?api_key=ca59847d10d1b5321571a0a279c95e61&language=en-US&page="+str(pageNumber))
+    while(len(topRatedList)<100):
+        r = requests.get("https://api.themoviedb.org/3/movie/top_rated?api_key=" + API_KEY +"&language=en-US&page="+str(pageNumber))
         movies = json.loads(r.text)
+
         if pageNumber>movies['total_pages']:
-            return god
+            return topRatedList
         else:
             for i in range(len(movies['results'])):
                 if(movies['results'][i]['id'] in watchedMovieIds):
                     continue
                 else:
                     movies['results'][i]['poster_path'] = "https://image.tmdb.org/t/p/w150" + movies['results'][i]['poster_path']
-                    god.append(movies['results'][i])
+                    topRatedList.append(movies['results'][i])
 
         pageNumber+=1
 
-    return god
+    return topRatedList
 
 def getWatchedMovies(idList):
 
     results = []
 
     for id in idList:
-        url = "https://api.themoviedb.org/3/movie/" + str(id) + "?api_key=ca59847d10d1b5321571a0a279c95e61&language=en-US"
+        url = "https://api.themoviedb.org/3/movie/" + str(id) + "?api_key=" + API_KEY +"&language=en-US"
         r = requests.get(url)
         movie = json.loads(r.text)
         movie['poster_path'] = "https://image.tmdb.org/t/p/w150" + movie['poster_path']
         results.append(movie)
-
 
     return results
