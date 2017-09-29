@@ -14,13 +14,14 @@ from django.core.urlresolvers import reverse
 
 API_KEY = os.environ.get('TMDB_API_KEY')
 
-class ColorForm(forms.Form):
-    fav_color = forms.CharField(label='Fav Color', max_length=100)
-
+# This view redirects to login
 def gotoLogin(request):
     return HttpResponseRedirect(reverse('login'))
 
+# View for login 
 def Login(request):
+
+	# This variable maintains the next state
     next = request.GET.get('next', '/unwatched/')
     if request.method == "POST":
         username = request.POST['username']
@@ -38,6 +39,7 @@ def Login(request):
 
     return render(request, "tracker/login.html", {'redirect_to': next})
 
+# View for Logging out the user
 def Logout(request):
     logout(request)
     return HttpResponseRedirect(settings.LOGIN_URL)
@@ -56,9 +58,9 @@ def Watched(request):
     return render(request, "tracker/watched.html", {'current_user':request.user,
                                                     'movies_list' : movies_list})
 
+# View to add movies to watched list
 @login_required
 def AddToWatched(request, movieid):
-
 
     b = UserWatched(username=request.user, movie_id=movieid, movie_rating=10)
     b.save()
@@ -67,47 +69,14 @@ def AddToWatched(request, movieid):
 
 @login_required
 def Unwatched(request,pageNumber=1):
-    if request.method == 'POST':
-
-        form = ColorForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            request.session["fav_color"] = request.POST['fav_color']
-
-            # return HttpResponseRedirect('/watched/')
-    else:
-        form = ColorForm()
-
-    if(not "fav_color" in request.session.keys()):
-        # print "relksal;dfkm"
-        request.session["fav_color"] = "Empty"
 
     movies_list = getTopRated(request,pageNumber)
+
     return render(request, "tracker/unwatched.html", {'current_user':request.user,
                                                       'movies_list' : movies_list})
 
 @login_required
 def Movie(request):
-    if request.method == 'POST':
-
-        form = ColorForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            request.session["fav_color"] = request.POST['fav_color']
-
-            # return HttpResponseRedirect('/watched/')
-    else:
-        form = ColorForm()
-
-    if(not "fav_color" in request.session.keys()):
-        # print "relksal;dfkm"
-        request.session["fav_color"] = "Empty"
 
     return render(request, "tracker/unwatched.html", {'current_user':request.user})
 
@@ -152,6 +121,7 @@ def getTopRated(request,pageNumber):
         pageNumber+=1
 
     return topRatedList
+
 
 def getWatchedMovies(idList):
 
