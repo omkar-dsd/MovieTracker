@@ -1,0 +1,76 @@
+<html>
+
+<head>
+  {% load static %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="{% static "tracker/css/appStyle.css" %}">
+  <link rel="shortcut icon" type="image/png" href="{% static "tracker/images/favicon.ico" %}"/>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+  <title>MT - Unwatched</title>
+</head>
+
+<body  style="background-color:#ECF0F1">
+  {% if user.is_authenticated %}
+  <ul>
+    <li><a href="#user">
+                <i class="fa fa-user-o" aria-hidden="true"></i> {{ current_user }}</a>
+    </li>
+    <li><a href="/watched/">
+                <i class="fa fa-map-signs" aria-hidden="true"></i> Watched</a>
+    </li>
+    <li><a href="/unwatched/">
+                <i class="fa fa-th" aria-hidden="true"></i> Un-watched</a>
+    </li>
+
+    <li style="float:right"><a href="/logout/">
+                <i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</a>
+    </li>
+  </ul>
+  <div class="w3-container">
+  <h2>{{movie.title}}</h2>
+    <a href="{% url 'watchedMovie' movieid=movie.id %}" class="button">Save to watched</a>
+
+    <img src={{movie.poster_path}} style="width:25%;">
+
+
+    <div class="w3-panel w3-card-4" style="background-color:#D0D3D4;"><b>Description :</b><p><i>{{movie.overview}}</i></p></div>
+    <div class="w3-panel w3-card-4" style="background-color:#D0D3D4;"><b>Rating :</b><p>{{movie.vote_average}}</p></div>
+      <div class="w3-panel w3-card-4" style="background-color:#D0D3D4;">
+        <b>Genre :</b>
+        <i><p>
+        {% for genre in movie.genres %}
+         {{genre.name}} .
+        {% endfor %}
+        </p></i>
+      </div>
+      {%if movie.homepage%}
+    <div class="w3-panel w3-card-4" style="background-color:#D0D3D4;"><b>Homepage :</b>
+      <a href={{movie.homepage}}>
+      <p>{{movie.homepage}}</p>
+    </a>
+    </div>
+      {% endif %}
+    <div class="w3-panel w3-card-4" style="background-color:#D0D3D4;"><b>Original Title (Original Language) :</b><p>{{movie.original_title}} ({{movie.original_language}})</p></div>
+    <div class="w3-panel w3-card-4" style="background-color:#D0D3D4;">
+      <b>Production Companies :</b>
+      <i><p>
+      {% for company in movie.production_companies %}
+       {{company.name}} .
+      {% endfor %}
+      </p></i>
+    </div>
+    <div class="w3-panel w3-card-4" style="background-color:#D0D3D4;">
+      <b>Production Countries :</b>
+      <i><p>
+      {% for country in movie.production_countries %}
+       {{country.name}} .
+      {% endfor %}
+      </p></i>
+    </div>
+    <div class="w3-panel w3-card-4" style="background-color:#D0D3D4;"><b>Release Date :</b><p>{{movie.release_date}}</p></div>
+    <div class="w3-panel w3-card-4" style="background-color:#D0D3D4;"><b>Runtime :</b><p>{{movie.runtime}} minutes</p></div>
+  </div>
+
+  {% else %}
+  <a href="/login/?next={{ request.path }}">Login</a> {% endif %}

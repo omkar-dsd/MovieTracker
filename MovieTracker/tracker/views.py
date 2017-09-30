@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django import forms
 from tracker.models import UserWatched
 import requests
-import json
+import json, sys, os
 from django.core.urlresolvers import reverse
 
 
@@ -18,7 +18,7 @@ API_KEY = os.environ.get('TMDB_API_KEY')
 def gotoLogin(request):
     return HttpResponseRedirect(reverse('login'))
 
-# View for login 
+# View for login
 def Login(request):
 
 	# This variable maintains the next state
@@ -76,9 +76,15 @@ def Unwatched(request,pageNumber=1):
                                                       'movies_list' : movies_list})
 
 @login_required
-def Movie(request):
+def MovieDescription(request, movieid):
 
-    return render(request, "tracker/unwatched.html", {'current_user':request.user})
+    url = "https://api.themoviedb.org/3/movie/" + str(movieid) + "?api_key=" + API_KEY +"&language=en-US"
+    r = requests.get(url)
+    movie = json.loads(r.text)
+    movie['poster_path'] = "https://image.tmdb.org/t/p/w150" + movie['poster_path']
+
+    return render(request, "tracker/movieDescription.html", {'current_user':request.user,
+                                                             'movie':movie})
 
 
 def Signup(request):

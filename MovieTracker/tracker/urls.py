@@ -10,4 +10,6 @@ urlpatterns = [
     url(r'^signup/$', views.Signup, name='signup'),
     url(r'^unwatched/$', views.Unwatched, name='unwatched'),
     url(r'^watched/(?P<movieid>\d+)/$', views.AddToWatched, name='watchedMovie'),
+    url(r'^description/(?P<movieid>\d+)/$', views.MovieDescription, name='movieDescription'),
+
 ]
