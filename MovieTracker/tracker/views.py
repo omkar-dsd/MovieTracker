@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserCreationForm
 from MovieTracker import settings
 from django.contrib.auth.decorators import login_required
 from django import forms
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
 from tracker.models import UserWatched
 import requests
 import json, sys, os
@@ -46,17 +48,19 @@ def Logout(request):
 
 
 # login is required for the following function Watched
-@login_required
-def Watched(request):
+class WatchedView(LoginRequiredMixin, TemplateView):
 
-    watchedMovieIds = UserWatched.objects.values_list('movie_id', flat=True).filter(username=request.user)
-    if(not watchedMovieIds):
-        movies_list = None
-    else:
-        movies_list = getWatchedMovies(set(watchedMovieIds))
+    template_name = "tracker/watched.html"
 
-    return render(request, "tracker/watched.html", {'current_user':request.user,
-                                                    'movies_list' : movies_list})
+    def get(self, request):
+        watchedMovieIds = UserWatched.objects.values_list('movie_id', flat=True).filter(username=request.user)
+        if(not watchedMovieIds):
+            movies_list = None
+        else:
+            movies_list = getWatchedMovies(set(watchedMovieIds))
+
+        return self.render_to_response({'current_user':request.user,
+                                                        'movies_list' : movies_list})
 
 # View to add movies to watched list
 @login_required
