@@ -4,6 +4,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from MovieTracker import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
 from django import forms
 from tracker.models import UserWatched
 import requests
@@ -67,13 +69,15 @@ def AddToWatched(request, movieid):
 
     return HttpResponseRedirect(reverse('unwatched'))
 
-@login_required
-def Unwatched(request,pageNumber=1):
 
-    movies_list = getTopRated(request,pageNumber)
+class UnwatchedView(LoginRequiredMixin, TemplateView):
+    template_name = "tracker/unwatched.html"
 
-    return render(request, "tracker/unwatched.html", {'current_user':request.user,
-                                                      'movies_list' : movies_list})
+    def get(self, request, pageNumber=1):
+        movies_list = getTopRated(request,pageNumber)
+
+        return self.render_to_response({'current_user':request.user,
+                                                          'movies_list' : movies_list})
 
 @login_required
 def MovieDescription(request, movieid):
