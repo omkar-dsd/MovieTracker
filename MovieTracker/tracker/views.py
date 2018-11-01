@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserCreationForm
 from MovieTracker import settings
 from django.contrib.auth.decorators import login_required
 from django import forms
+from django.views.generic import TemplateView, View
+
 from tracker.models import UserWatched
 import requests
 import json, sys, os
@@ -18,10 +20,10 @@ API_KEY = os.environ.get('TMDB_API_KEY')
 def gotoLogin(request):
     return HttpResponseRedirect(reverse('login'))
 
+
 # View for login
 def Login(request):
-
-	# This variable maintains the next state
+    # This variable maintains the next state
     next = request.GET.get('next', '/unwatched/')
     if request.method == "POST":
         username = request.POST['username']
@@ -40,9 +42,11 @@ def Login(request):
     return render(request, "tracker/login.html", {'redirect_to': next})
 
 # View for Logging out the user
-def Logout(request):
-    logout(request)
-    return HttpResponseRedirect(settings.LOGIN_URL)
+class LogoutView(View):
+
+    def get(self, request):
+        logout(request)
+        return HttpResponseRedirect(settings.LOGIN_URL)
 
 
 # login is required for the following function Watched
