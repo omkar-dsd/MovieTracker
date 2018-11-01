@@ -4,9 +4,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from MovieTracker import settings
 from django.contrib.auth.decorators import login_required
-from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
+from django import forms
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView, View
 from tracker.models import UserWatched
 import requests
 import json, sys, os
@@ -20,10 +22,10 @@ API_KEY = os.environ.get('TMDB_API_KEY')
 def gotoLogin(request):
     return HttpResponseRedirect(reverse('login'))
 
+
 # View for login
 def Login(request):
-
-	# This variable maintains the next state
+    # This variable maintains the next state
     next = request.GET.get('next', '/unwatched/')
     if request.method == "POST":
         username = request.POST['username']
@@ -42,9 +44,11 @@ def Login(request):
     return render(request, "tracker/login.html", {'redirect_to': next})
 
 # View for Logging out the user
-def Logout(request):
-    logout(request)
-    return HttpResponseRedirect(settings.LOGIN_URL)
+class LogoutView(View):
+
+    def get(self, request):
+        logout(request)
+        return HttpResponseRedirect(settings.LOGIN_URL)
 
 
 # login is required for the following function Watched
@@ -71,13 +75,15 @@ def AddToWatched(request, movieid):
 
     return HttpResponseRedirect(reverse('unwatched'))
 
-@login_required
-def Unwatched(request,pageNumber=1):
 
-    movies_list = getTopRated(request,pageNumber)
+class UnwatchedView(LoginRequiredMixin, TemplateView):
+    template_name = "tracker/unwatched.html"
 
-    return render(request, "tracker/unwatched.html", {'current_user':request.user,
-                                                      'movies_list' : movies_list})
+    def get(self, request, pageNumber=1):
+        movies_list = getTopRated(request,pageNumber)
+
+        return self.render_to_response({'current_user':request.user,
+                                                          'movies_list' : movies_list})
 
 @login_required
 def MovieDescription(request, movieid):
