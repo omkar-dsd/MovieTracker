@@ -12,7 +12,7 @@ futures==3.0.5
 gunicorn==19.6.0
 html5lib==0.999999999
 httplib2==0.9.1
-Jinja2==2.8
+Jinja2==2.11.3
 jsondatabase==0.1.7
 jsonschema==2.6.0
 lxml==3.5.0
