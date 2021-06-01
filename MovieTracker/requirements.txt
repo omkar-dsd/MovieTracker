@@ -32,7 +32,7 @@ social-auth-app-django==1.2.0
 social-auth-core==1.4.0
 static3==0.7.0
 unittest2==1.1.0
-urllib3==1.13.1
+urllib3==1.26.5
 virtualenv==15.0.2
 virtualenv-clone==0.2.6
 virtualenvwrapper==4.7.2
